@@ -7,7 +7,7 @@ export const MainView = () => {
 
   const [selectedMovie, setSelectedMovie] = useState(null);
   useEffect(() => {
-    fetch("https://cloud.mongodb.com/v2/6696cc30287d9c09a2dc4b69#/metrics/replicaSet/6696cd3dd908637989eedbae/explorer/myFlixDB/movies")
+    fetch("https://movie-api-1-34lz.onrender.com/movies")
     .then((response) => response.json())
     .then((data) => {
       setMovies(data);
