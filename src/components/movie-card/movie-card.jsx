@@ -17,11 +17,11 @@ MovieCard.propTypes = {
     Title: PropTypes.string.isRequired,
     ImagePath: PropTypes.string.isRequired,
     Director: PropTypes.shape({
-      Name: PropTypes.string.isRequired
+      Name: PropTypes.string.isRequired,
     }),
     Genre: PropTypes.shape({
-      Name: PropTypes.string.isRequired
-    })
+      Name: PropTypes.string.isRequired,
+    }),
   }).isRequired,
   onMovieClick: PropTypes.func.isRequired,
 };
