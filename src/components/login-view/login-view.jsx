@@ -6,22 +6,26 @@ export const LoginView = ({ onLoggedIn }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     const data = {
-      access: username,
-      secret: password,
+      Username: username,
+      Password: password,
     };
-
-    fetch("https://movie-api-1-34lz.onrender.com/login", {
+  
+    fetch("https://movie-api-1-34lz.onrender.com/login", { 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Login failed: ' + response.statusText);
+        }
+        return response.json();
+      })
       .then((data) => {
-        console.log("Login response: ", data);
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
@@ -30,8 +34,9 @@ export const LoginView = ({ onLoggedIn }) => {
           alert("No such user");
         }
       })
-      .catch((e) => {
-        alert("Something went wrong");
+      .catch((error) => {
+        console.error("Login error: ", error);
+        alert("Something went wrong: " + error.message);
       });
   };
 
