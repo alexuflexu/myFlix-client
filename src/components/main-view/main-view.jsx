@@ -3,6 +3,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -20,9 +21,22 @@ export const MainView = () => {
     fetch("https://movie-api-1-34lz.onrender.com/movies", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
       .then((movies) => {
-        setMovies(movies);
+        const formattedMovies = movies.map((movie) => ({
+          ...movie,
+          _id: movie._id?.$oid || movie._id,
+        }));
+        console.log("Formatted Movies:", formattedMovies);
+        setMovies(formattedMovies);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
       });
   }, [token]);
 
@@ -34,6 +48,7 @@ export const MainView = () => {
 
   return (
     <BrowserRouter>
+      <NavigationBar user={user} onLoggedOut={handleLogout} />
       <Row className="justify-content-md-center">
         <Routes>
           <Route
@@ -85,10 +100,7 @@ export const MainView = () => {
               !user ? (
                 <Navigate to="/login" replace />
               ) : movies.length === 0 ? (
-                <>
-                  <button onClick={handleLogout}>Logout</button>
-                  <div>The list is empty!</div>
-                </>
+                <Col>The list is empty!</Col>
               ) : (
                 <>
                   {movies.map((movie) => (
