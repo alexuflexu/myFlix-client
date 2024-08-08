@@ -3,6 +3,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -21,23 +22,9 @@ export const MainView = () => {
     fetch("https://movie-api-1-34lz.onrender.com/movies", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((movies) => {
-        const formattedMovies = movies.map((movie) => ({
-          ...movie,
-          _id: movie._id?.$oid || movie._id,
-        }));
-        console.log("Formatted Movies:", formattedMovies);
-        setMovies(formattedMovies);
-      })
-      .catch((error) => {
-        console.error("Error fetching movies:", error);
-      });
+      .then((response) => response.json())
+      .then((movies) => setMovies(movies))
+      .catch((error) => console.error("Error fetching movies:", error));
   }, [token]);
 
   const handleLogout = () => {
@@ -95,6 +82,23 @@ export const MainView = () => {
             }
           />
           <Route
+            path="/profile"
+            element={
+              !user ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <Col md={8}>
+                  <ProfileView
+                    user={user}
+                    token={token}
+                    movies={movies}
+                    onUserUpdate={setUser}
+                  />
+                </Col>
+              )
+            }
+          />
+          <Route
             path="/"
             element={
               !user ? (
@@ -105,7 +109,12 @@ export const MainView = () => {
                 <>
                   {movies.map((movie) => (
                     <Col className="mb-5" key={movie._id} md={3}>
-                      <MovieCard movie={movie} />
+                      <MovieCard
+                        movie={movie}
+                        user={user}
+                        token={token}
+                        onFavoriteToggle={setUser}
+                      />
                     </Col>
                   ))}
                 </>
