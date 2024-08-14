@@ -1,11 +1,12 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./movie-view.scss";
 
-export const MovieView = ({ movies }) => {
+export const MovieView = () => {
   const { movieId } = useParams();
-  console.log("Movie ID from params:", movieId);
-  console.log("Movies list:", movies);
+  const movies = useSelector((state) => state.movies.list);
 
   const movie = movies.find((m) => m._id === movieId);
 
