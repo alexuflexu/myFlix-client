@@ -1,9 +1,25 @@
 .favorite-button {
-    padding: 4px 12px;
-    color: whitesmoke;
-    background-color: Goldenrod !important;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
+  padding: 4px 12px !important;
+  color: whitesmoke !important;
+  background-color: Goldenrod !important;
+  border: none !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+}
+
+.favorite-button:hover,
+.favorite-button:focus,
+.favorite-button:active {
+  background-color: darken(Goldenrod, 10%) !important;
+  color: whitesmoke !important;
+}
+
+.favorite-button.remove {
+  background-color: DarkGoldenrod !important;
+}
+
+.favorite-button.remove:hover,
+.favorite-button.remove:focus,
+.favorite-button.remove:active {
+  background-color: darken(DarkGoldenrod, 10%) !important;
+}

@@ -65,6 +65,30 @@ export const ProfileView = ({ user, token, movies, onUserUpdate }) => {
       });
   };
 
+  const handleFavoriteToggle = (movieId) => {
+    const isFavorite = user.FavoriteMovies.includes(movieId);
+    const method = isFavorite ? "DELETE" : "POST";
+
+    fetch(`https://movie-api-1-34lz.onrender.com/users/${user.Username}/movies/${movieId}`, {
+      method: method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          const updatedFavorites = isFavorite
+            ? user.FavoriteMovies.filter((id) => id !== movieId)
+            : [...user.FavoriteMovies, movieId];
+
+          onUserUpdate({ ...user, FavoriteMovies: updatedFavorites });
+        } else {
+          console.error("Failed to update favorites");
+        }
+      })
+      .catch((error) => console.error("Error: ", error));
+  };
+
   const favoriteMovies = movies.filter((m) =>
     user.FavoriteMovies.includes(m._id)
   );
@@ -130,7 +154,7 @@ export const ProfileView = ({ user, token, movies, onUserUpdate }) => {
             movie={movie}
             user={user}
             token={token}
-            onFavoriteToggle={onUserUpdate}
+            onFavoriteToggle={handleFavoriteToggle}
           />
         ))}
       </div>
