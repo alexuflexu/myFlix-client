@@ -27,6 +27,7 @@ Build the application for production:
 
 Deploy the build directory to your preferred web server or hosting service.
 
+
 ## File Structure
 src/  
 │  
@@ -62,6 +63,10 @@ src/
 ├── index.html  
 ├── index.jsx  
 └── index.scss  
+
+
+## Hosting
+This project is hosted on Netlify: https://silent-movies.netlify.app/
 
 ## License
 This project is licensed under the MIT License.
